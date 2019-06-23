@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+
+    mysql:
+        image: mysql:5.7
+        container_name: pythonFirst_mysql
+        volumes:
+            - ./mysql:/var/lib/mysql
+        restart: always
+        ports:
+            - 3311:3306
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+
+    app:
+        build:
+            context: .
+        volumes:
+            - ./app:/app
+        container_name: pythonFirst
+        restart: always
+        ports:
+            - 8089:80
+        command: >
+            sh -c "python manage.py runserver 0.0.0.0:8089"
+        depends_on:
+            - mysql
